@@ -2,7 +2,7 @@
 
 A responsive, single-page shoe shopping website built with **HTML, CSS, and JavaScript**. STRIDE CO. showcases a collection of footwear in a clean, modern storefront where visitors can browse products, filter by category, search for shoes, save favorites, and manage a demo shopping bag.
 
-**Live website:** https://basakristinejoy.github.io/STRIDE-CO-SHOE-SHOP-/
+**Live website:** (https://basakristinejoy.github.io/STRIDE-CO./)
 
 **Student:** KRISTINE JOY M. BASA  
 **Year and Section:** _Add your year and section_
