@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="STRIDE CO. — discover your next favorite pair of shoes.">
+  <title>STRIDE CO. | Shoe Shop</title>
+  <style>
+    :root {
+      --ink: #171717;
+      --muted: #6f6f6f;
+      --paper: #f7f6f2;
+      --white: #fff;
+      --lime: #d8f36a;
+      --line: #e5e3dc;
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    .announcement {
+      padding: 10px 16px;
+      text-align: center;
+      background: var(--ink);
+      color: white;
+      font-size: 12px;
+      letter-spacing: .12em;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(247,246,242,.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .logo { font-size: 22px; font-weight: 900; letter-spacing: -.07em; }
+    .logo span { color: #747d37; }
+    .nav-links { display: flex; align-items: center; gap: 28px; font-size: 13px; font-weight: 700; }
+    .nav-links a:hover { opacity: .6; }
+    .cart-button {
+      border: 1px solid var(--ink);
+      border-radius: 999px;
+      background: transparent;
+      padding: 10px 15px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+    .cart-button:hover { background: var(--ink); color: white; }
+    main { max-width: 1200px; margin: auto; padding: 24px; }
+    .hero {
+      min-height: 440px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      overflow: hidden;
+      border-radius: 26px;
+      background: #e8e9df;
+    }
+    .hero-copy { padding: clamp(28px, 5vw, 64px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+    .eyebrow { font-size: 11px; letter-spacing: .18em; font-weight: 800; text-transform: uppercase; }
+    h1 { margin: 18px 0; max-width: 520px; font-size: clamp(42px, 6vw, 76px); line-height: .94; letter-spacing: -.075em; }
+    .hero-copy p { max-width: 390px; line-height: 1.65; color: #55594c; font-size: 15px; }
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+      padding: 15px 21px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+      font-size: 13px;
+      transition: transform .2s, background .2s;
+    }
+    .primary-button:hover { transform: translateY(-2px); background: #444; }
+    .hero-art { min-height: 360px; position: relative; overflow: hidden; background: #daddce; }
+    .hero-art img { width: 100%; height: 100%; min-height: 440px; object-fit: cover; display: block; }
+    .hero-tag {
+      position: absolute; right: 22px; bottom: 22px;
+      background: var(--lime); padding: 12px 16px; border-radius: 999px;
+      font-size: 11px; font-weight: 900; letter-spacing: .08em;
+    }
+    .ticker { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 25px 4px; border-bottom: 1px solid var(--line); color: #5e5e58; font-size: 11px; font-weight: 800; letter-spacing: .1em; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin: 48px 0 22px; }
+    .section-head h2 { margin: 0; font-size: clamp(28px, 4vw, 42px); letter-spacing: -.06em; }
+    .section-head p { color: var(--muted); margin: 8px 0 0; font-size: 13px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter {
+      border: 1px solid #d6d4cc; background: transparent; padding: 10px 14px;
+      border-radius: 999px; font-size: 12px; font-weight: 700;
+    }
+    .filter.active, .filter:hover { background: var(--ink); border-color: var(--ink); color: white; }
+    .tools { display: flex; gap: 10px; align-items: center; margin: 20px 0; }
+    .search {
+      width: 100%; max-width: 330px; border: 1px solid var(--line); background: white;
+      border-radius: 999px; padding: 12px 16px; outline: none;
+    }
+    .search:focus { border-color: #777; }
+    .product-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    .product-card { min-width: 0; }
+    .product-image { position: relative; overflow: hidden; border-radius: var(--radius); background: #ecebe5; aspect-ratio: 4 / 4.4; }
+    .product-image img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .45s; }
+    .product-card:hover .product-image img { transform: scale(1.045); }
+    .product-badge { position: absolute; top: 12px; left: 12px; background: var(--white); padding: 7px 10px; border-radius: 999px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+    .heart {
+      position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border: 0;
+      border-radius: 50%; background: rgba(255,255,255,.9); font-size: 18px;
+    }
+    .heart.liked { background: var(--lime); }
+    .product-info { padding: 13px 2px 4px; }
+    .product-line { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+    .product-line h3 { font-size: 14px; margin: 0; }
+    .price { font-size: 13px; font-weight: 900; white-space: nowrap; }
+    .category { margin: 7px 0 13px; color: var(--muted); font-size: 12px; }
+    .add-button { width: 100%; border: 1px solid #d7d5cd; border-radius: 999px; background: transparent; padding: 11px; font-size: 12px; font-weight: 800; }
+    .add-button:hover { background: var(--ink); color: white; border-color: var(--ink); }
+    .empty { grid-column: 1 / -1; padding: 45px; text-align: center; color: var(--muted); }
+    .story {
+      display: grid; grid-template-columns: .9fr 1.1fr; gap: 30px; align-items: center;
+      margin: 76px 0; padding: clamp(24px, 4vw, 48px); border-radius: 24px; background: #e8e9df;
+    }
+    .story h2 { margin: 12px 0; font-size: clamp(30px, 4vw, 48px); line-height: 1; letter-spacing: -.06em; }
+    .story p { max-width: 420px; color: #55594c; line-height: 1.7; font-size: 14px; }
+    .story img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 16px; }
+    .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 40px 0 60px; }
+    .benefit { padding: 22px; border: 1px solid var(--line); border-radius: 16px; }
+    .benefit b { display: block; margin-bottom: 8px; font-size: 13px; }
+    .benefit p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    footer { background: var(--ink); color: white; }
+    .footer-inner { max-width: 1200px; margin: auto; padding: 32px 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .footer-inner p { margin: 6px 0 0; color: #c2c2bc; font-size: 12px; }
+    .footer-links { display: flex; gap: 18px; font-size: 12px; }
+    .toast { position: fixed; z-index: 30; bottom: 20px; left: 50%; transform: translate(-50%, 120px); background: var(--ink); color: white; border-radius: 999px; padding: 13px 20px; font-size: 13px; box-shadow: 0 8px 30px #0002; transition: transform .25s; }
+    .toast.show { transform: translate(-50%, 0); }
+    .cart-panel { position: fixed; inset: 0 0 0 auto; z-index: 25; width: min(390px, 100%); padding: 24px; background: white; box-shadow: -10px 0 40px #0001; transform: translateX(105%); transition: transform .3s; display: flex; flex-direction: column; }
+    .cart-panel.open { transform: translateX(0); }
+    .cart-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+    .cart-head h2 { margin: 0; letter-spacing: -.04em; }
+    .close-cart { border: 0; background: #f0efe9; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; }
+    .cart-items { flex: 1; overflow: auto; padding: 10px 0; }
+    .cart-item { display: flex; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+    .cart-item small { display: block; margin-top: 5px; color: var(--muted); }
+    .remove-item { border: 0; background: transparent; color: #8a3838; font-size: 12px; }
+    .cart-total { border-top: 1px solid var(--line); padding-top: 18px; display: flex; justify-content: space-between; font-weight: 900; }
+    .checkout { width: 100%; }
+    .overlay { display: none; position: fixed; inset: 0; z-index: 20; background: #0005; }
+    .overlay.show { display: block; }
+    @media (max-width: 850px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-art, .hero-art img { min-height: 300px; max-height: 380px; }
+      .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+      .section-head { align-items: start; flex-direction: column; }
+      .story { grid-template-columns: 1fr; }
+      .story img { order: -1; }
+    }
+    @media (max-width: 520px) {
+      .nav { padding: 15px 16px; }
+      .nav-links { gap: 12px; font-size: 11px; }
+      .nav-links a:nth-child(2) { display: none; }
+      .logo { font-size: 19px; }
+      .cart-button { padding: 9px 11px; }
+      main { padding: 14px; }
+      .hero { border-radius: 18px; }
+      .hero-copy { padding: 30px 23px; }
+      .hero-art, .hero-art img { min-height: 250px; }
+      .ticker { justify-content: center; font-size: 10px; }
+      .benefits { grid-template-columns: 1fr; }
+      .product-line { flex-direction: column; gap: 6px; }
+      .footer-inner { padding: 28px 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">GOOD SHOES. GOOD MOVES. &nbsp; • &nbsp; FIND YOUR NEXT EVERYDAY FAVORITE</div>
+  <header>
+    <nav class="nav" aria-label="Main navigation">
+      <a class="logo" href="#home">STRIDE<span>CO.</span></a>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#shop">Shop all</a>
+        <a href="#about">Our story</a>
+      </div>
+      <button class="cart-button" id="openCart" aria-label="Open shopping cart">BAG (<span id="cartCount">0</span>)</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow">Step into your stride</span>
+        <h1>Made to move.<br>Built for you.</h1>
+        <p>From early morning miles to everyday city walks, find footwear that keeps up with every version of you.</p>
+        <a class="primary-button" href="#shop">SHOP THE COLLECTION <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="hero-art">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=1200&q=85" alt="Bright red athletic sneaker">
+        <span class="hero-tag">YOUR NEXT FAVORITE PAIR</span>
+      </div>
+    </section>
+
+    <div class="ticker" aria-label="Store highlights">
+      <span>DESIGNED FOR EVERY DAY</span><span>COMFORT THAT GOES FURTHER</span><span>FIND YOUR OWN STRIDE</span>
+    </div>
+
+    <section id="shop">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">The collection</span>
+          <h2>Find your fit.</h2>
+          <p>Good-looking shoes for wherever life takes you.</p>
+        </div>
+        <div class="filters" aria-label="Filter products">
+          <button class="filter active" data-filter="All">All shoes</button>
+          <button class="filter" data-filter="Running">Running</button>
+          <button class="filter" data-filter="Lifestyle">Lifestyle</button>
+          <button class="filter" data-filter="Slip-on">Slip-on</button>
+        </div>
+      </div>
+      <div class="tools">
+        <input class="search" id="searchInput" type="search" placeholder="Search shoes..." aria-label="Search shoes">
+      </div>
+      <div class="product-grid" id="productGrid" aria-live="polite"></div>
+    </section>
+
+    <section class="story" id="about">
+      <div>
+        <span class="eyebrow">A little about us</span>
+        <h2>Every step has a story.</h2>
+        <p>At STRIDE CO., we believe the right pair can take you places. Our collection brings together everyday style and comfort, so you can move through your day feeling like yourself.</p>
+        <a class="primary-button" href="#shop">EXPLORE THE SHOES <span aria-hidden="true">↗</span></a>
+      </div>
+      <img src="https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=1100&q=85" alt="Modern sneaker product photography">
+    </section>
+
+    <section class="benefits" aria-label="Shopping benefits">
+      <div class="benefit"><b>01 / Everyday comfort</b><p>Styles picked for daily routines, casual outings, and active days.</p></div>
+      <div class="benefit"><b>02 / Easy to explore</b><p>Browse the collection, search styles, and filter by shoe type.</p></div>
+      <div class="benefit"><b>03 / Your personal picks</b><p>Save favorites with the heart button and add products to your bag.</p></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><a class="logo" href="#home">STRIDE<span>CO.</span></a><p>Find your own stride. © <span id="year"></span> STRIDE CO.</p></div>
+      <div class="footer-links"><a href="#home">Home</a><a href="#shop">Shop</a><a href="#about">About</a></div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart-panel" id="cartPanel" aria-label="Shopping cart" aria-hidden="true">
+    <div class="cart-head"><h2>Your bag <span id="cartTitleCount">(0)</span></h2><button class="close-cart" id="closeCart" aria-label="Close cart">×</button></div>
+    <div class="cart-items" id="cartItems"><p>Your bag is empty. Find a pair you love!</p></div>
+    <div class="cart-total"><span>Total</span><span id="cartTotal">₱0</span></div>
+    <button class="primary-button checkout" id="checkoutButton">CONTINUE <span aria-hidden="true">→</span></button>
+    <p style="color:#777;font-size:11px;line-height:1.5">Demo shopping bag only. Checkout and payment are not connected.</p>
+  </aside>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const products = [
+      { id: 1, name: "Trailhead Runner", category: "Running", price: 2890, badge: "Bestseller", image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=85", alt: "Red running sneaker" },
+      { id: 2, name: "Marathon Pro", category: "Running", price: 3490, badge: "Performance", image: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=85", alt: "Athletic running shoes" },
+      { id: 3, name: "Boulevard Low", category: "Lifestyle", price: 2590, badge: "Everyday", image: "https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=800&q=85", alt: "Casual low-top sneaker" },
+      { id: 4, name: "Cloudstep Slip-On", category: "Slip-on", price: 1990, badge: "Easy wear", image: "https://images.unsplash.com/photo-1520256862855-398228c41684?auto=format&fit=crop&w=800&q=85", alt: "Casual slip-on footwear" },
+      { id: 5, name: "City Pace", category: "Lifestyle", price: 2390, badge: "", image: "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=800&q=85", alt: "Modern casual sneaker" },
+      { id: 6, name: "Velocity Knit", category: "Running", price: 3190, badge: "Lightweight", image: "https://images.unsplash.com/photo-1460353581641-37babbab0fa2?auto=format&fit=crop&w=800&q=85", alt: "Lightweight athletic shoe" },
+      { id: 7, name: "Weekend Classic", category: "Lifestyle", price: 2290, badge: "", image: "https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=85", alt: "Classic everyday sneaker" },
+      { id: 8, name: "Drift Slip-On", category: "Slip-on", price: 1890, badge: "Comfort pick", image: "https://images.unsplash.com/photo-1562273138-f46be4ebdf33?auto=format&fit=crop&w=800&q=85", alt: "Comfortable casual shoes" }
+    ];
+    let activeFilter = "All";
+    let cart = [];
+    let favorites = new Set();
+
+    const peso = amount => "₱" + amount.toLocaleString("en-PH");
+    const grid = document.getElementById("productGrid");
+    const searchInput = document.getElementById("searchInput");
+    const toast = document.getElementById("toast");
+
+    function renderProducts() {
+      const term = searchInput.value.trim().toLowerCase();
+      const visible = products.filter(p =>
+        (activeFilter === "All" || p.category === activeFilter) &&
+        (p.name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term))
+      );
+      if (!visible.length) {
+        grid.innerHTML = '<div class="empty">No shoes found. Try another search.</div>';
+        return;
+      }
+      grid.innerHTML = visible.map(p => `
+        <article class="product-card">
+          <div class="product-image">
+            <img src="${p.image}" alt="${p.alt}" loading="lazy" onerror="this.onerror=null;this.src='https://placehold.co/700x770/ecebe5/171717?text=STRIDE+CO.'">
+            ${p.badge ? `<span class="product-badge">${p.badge}</span>` : ""}
+            <button class="heart ${favorites.has(p.id) ? "liked" : ""}" data-favorite="${p.id}" aria-label="${favorites.has(p.id) ? "Remove from" : "Add to"} favorites">${favorites.has(p.id) ? "♥" : "♡"}</button>
+          </div>
+          <div class="product-info">
+            <div class="product-line"><h3>${p.name}</h3><span class="price">${peso(p.price)}</span></div>
+            <p class="category">${p.category} shoes</p>
+            <button class="add-button" data-add="${p.id}">ADD TO BAG +</button>
+          </div>
+        </article>
+      `).join("");
+    }
+    function notify(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(notify.timer);
+      notify.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+    }
+    function updateCart() {
+      document.getElementById("cartCount").textContent = cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById("cartTitleCount").textContent = "(" + cart.reduce((sum, item) => sum + item.qty, 0) + ")";
+      document.getElementById("cartTotal").textContent = peso(cart.reduce((sum, item) => sum + item.price * item.qty, 0));
+      const cartItems = document.getElementById("cartItems");
+      if (!cart.length) {
+        cartItems.innerHTML = "<p>Your bag is empty. Find a pair you love!</p>";
+        return;
+      }
+      cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div><strong>${item.name}</strong><small>${item.qty} × ${peso(item.price)}</small></div>
+          <div style="text-align:right"><strong>${peso(item.price * item.qty)}</strong><br><button class="remove-item" data-remove="${item.id}">Remove</button></div>
+        </div>
+      `).join("");
+    }
+    function openCart() {
+      document.getElementById("cartPanel").classList.add("open");
+      document.getElementById("cartPanel").setAttribute("aria-hidden", "false");
+      document.getElementById("overlay").classList.add("show");
+    }
+    function closeCart() {
+      document.getElementById("cartPanel").classList.remove("open");
+      document.getElementById("cartPanel").setAttribute("aria-hidden", "true");
+      document.getElementById("overlay").classList.remove("show");
+    }
+    document.querySelectorAll(".filter").forEach(button => button.addEventListener("click", () => {
+      activeFilter = button.dataset.filter;
+      document.querySelectorAll(".filter").forEach(b => b.classList.toggle("active", b === button));
+      renderProducts();
+    }));
+    searchInput.addEventListener("input", renderProducts);
+    grid.addEventListener("click", event => {
+      const addButton = event.target.closest("[data-add]");
+      const favoriteButton = event.target.closest("[data-favorite]");
+      if (addButton) {
+        const product = products.find(p => p.id === Number(addButton.dataset.add));
+        const existing = cart.find(item => item.id === product.id);
+        if (existing) existing.qty++;
+        else cart.push({ ...product, qty: 1 });
+        updateCart();
+        notify(product.name + " added to your bag");
+      }
+      if (favoriteButton) {
+        const id = Number(favoriteButton.dataset.favorite);
+        if (favorites.has(id)) favorites.delete(id); else favorites.add(id);
+        renderProducts();
+        notify(favorites.has(id) ? "Added to favorites" : "Removed from favorites");
+      }
+    });
+    document.getElementById("cartItems").addEventListener("click", event => {
+      const removeButton = event.target.closest("[data-remove]");
+      if (!removeButton) return;
+      cart = cart.filter(item => item.id !== Number(removeButton.dataset.remove));
+      updateCart();
+    });
+    document.getElementById("openCart").addEventListener("click", openCart);
+    document.getElementById("closeCart").addEventListener("click", closeCart);
+    document.getElementById("overlay").addEventListener("click", closeCart);
+    document.getElementById("checkoutButton").addEventListener("click", () => {
+      notify(cart.length ? "This demo does not process payments yet." : "Your bag is empty");
+    });
+    document.getElementById("year").textContent = new Date().getFullYear();
+    renderProducts();
+    updateCart();
+  </script>
+</body>
+</html>
